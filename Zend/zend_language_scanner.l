@@ -46,6 +46,7 @@
 #include "zend_strtod.h"
 #include "zend_exceptions.h"
 #include "zend_virtual_cwd.h"
+#include "zend_atom.h"
 
 #define YYCTYPE   unsigned char
 #define YYFILL(n) { if ((YYCURSOR + n) >= (YYLIMIT + ZEND_MMAP_AHEAD)) { return 0; } }
@@ -2392,6 +2393,14 @@ inline_char_handler:
 
 <ST_IN_SCRIPTING>"\\" {
 	RETURN_TOKEN(T_NS_SEPARATOR);
+}
+
+<ST_IN_SCRIPTING>":"{LABEL} {
+	zend_string *atom_name = zend_string_init(yytext + 1, yyleng - 1, 0);
+	uint32_t atom_id = zend_atom_create(atom_name);
+	zend_string_release(atom_name);
+	ZVAL_ATOM(zendlval, atom_id);
+	RETURN_TOKEN_WITH_VAL(T_ATOM);
 }
 
 <ST_IN_SCRIPTING,ST_VAR_OFFSET>{LABEL} {

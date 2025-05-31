@@ -2285,6 +2285,9 @@ ZEND_API int ZEND_FASTCALL zend_compare(zval *op1, zval *op2) /* {{{ */
 			case TYPE_PAIR(IS_TRUE, IS_NULL):
 				return 1;
 
+			case TYPE_PAIR(IS_ATOM, IS_ATOM):
+				return Z_ATOM_ID_P(op1) == Z_ATOM_ID_P(op2) ? 0 : (Z_ATOM_ID_P(op1) < Z_ATOM_ID_P(op2) ? -1 : 1);
+
 			case TYPE_PAIR(IS_STRING, IS_STRING):
 				if (Z_STR_P(op1) == Z_STR_P(op2)) {
 					return 0;
@@ -2415,6 +2418,8 @@ ZEND_API bool ZEND_FASTCALL zend_is_identical(const zval *op1, const zval *op2) 
 			return 1;
 		case IS_LONG:
 			return (Z_LVAL_P(op1) == Z_LVAL_P(op2));
+		case IS_ATOM:
+			return (Z_ATOM_ID_P(op1) == Z_ATOM_ID_P(op2));
 		case IS_RESOURCE:
 			return (Z_RES_P(op1) == Z_RES_P(op2));
 		case IS_DOUBLE:

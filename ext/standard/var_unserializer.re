@@ -19,6 +19,7 @@
 #include "php_incomplete_class.h"
 #include "zend_portability.h"
 #include "zend_exceptions.h"
+#include "zend_atom.h"
 
 /* {{{ reference-handling for unserializer: var_* */
 #define VAR_ENTRIES_MAX 1018     /* 1024 - offsetof(php_unserialize_data, entries) / sizeof(void*) */
@@ -1055,6 +1056,42 @@ use_double:
 	} else {
 		ZVAL_STRINGL_FAST(rval, str, len);
 	}
+	return 1;
+}
+
+"A:" uiv ":" ["] 	{
+	size_t len, maxlen;
+	char *str;
+
+	len = parse_uiv(start + 2);
+	maxlen = max - YYCURSOR;
+	if (maxlen < len) {
+		*p = start + 2;
+		return 0;
+	}
+
+	str = (char*)YYCURSOR;
+
+	YYCURSOR += len;
+
+	if (*(YYCURSOR) != '"') {
+		*p = YYCURSOR;
+		return 0;
+	}
+
+	if (*(YYCURSOR + 1) != ';') {
+		*p = YYCURSOR + 1;
+		return 0;
+	}
+
+	YYCURSOR += 2;
+	*p = YYCURSOR;
+
+	/* Create atom from name */
+	zend_string *atom_name = zend_string_init(str, len, 0);
+	uint32_t atom_id = zend_atom_create(atom_name);
+	zend_string_release(atom_name);
+	ZVAL_ATOM(rval, atom_id);
 	return 1;
 }
 

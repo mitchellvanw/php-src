@@ -6282,6 +6282,9 @@ ZEND_VM_C_LABEL(num_index):
 			zend_use_resource_as_offset(offset);
 			hval = Z_RES_HANDLE_P(offset);
 			ZEND_VM_C_GOTO(num_index);
+		} else if (Z_TYPE_P(offset) == IS_ATOM) {
+			str = zend_atom_name(Z_ATOM_ID_P(offset));
+			ZEND_VM_C_GOTO(str_index);
 		} else if (OP2_TYPE == IS_CV && Z_TYPE_P(offset) == IS_UNDEF) {
 			ZVAL_UNDEFINED_OP2();
 			str = ZSTR_EMPTY_ALLOC();
@@ -6792,6 +6795,9 @@ ZEND_VM_C_LABEL(num_index_dim):
 				zend_use_resource_as_offset(offset);
 				hval = Z_RES_HANDLE_P(offset);
 				ZEND_VM_C_GOTO(num_index_dim);
+			} else if (Z_TYPE_P(offset) == IS_ATOM) {
+				key = zend_atom_name(Z_ATOM_ID_P(offset));
+				ZEND_VM_C_GOTO(str_index_dim);
 			} else if (OP2_TYPE == IS_CV && Z_TYPE_P(offset) == IS_UNDEF) {
 				ZVAL_UNDEFINED_OP2();
 				key = ZSTR_EMPTY_ALLOC();
@@ -10041,6 +10047,18 @@ ZEND_VM_HOT_TYPE_SPEC_HANDLER(ZEND_IS_EQUAL|ZEND_IS_IDENTICAL, (op1_info == MAY_
 	ZEND_VM_SMART_BRANCH(result, 0);
 }
 
+ZEND_VM_HOT_TYPE_SPEC_HANDLER(ZEND_IS_EQUAL|ZEND_IS_IDENTICAL, (op1_info == MAY_BE_ATOM && op2_info == MAY_BE_ATOM), ZEND_IS_EQUAL_ATOM, CONST|TMPVARCV, CONST|TMPVARCV, SPEC(SMART_BRANCH,NO_CONST_CONST,COMMUTATIVE))
+{
+	USE_OPLINE
+	zval *op1, *op2;
+	bool result;
+
+	op1 = GET_OP1_ZVAL_PTR_UNDEF(BP_VAR_R);
+	op2 = GET_OP2_ZVAL_PTR_UNDEF(BP_VAR_R);
+	result = (Z_ATOM_ID_P(op1) == Z_ATOM_ID_P(op2));
+	ZEND_VM_SMART_BRANCH(result, 0);
+}
+
 ZEND_VM_HOT_TYPE_SPEC_HANDLER(ZEND_IS_NOT_EQUAL|ZEND_IS_NOT_IDENTICAL, (op1_info == MAY_BE_LONG && op2_info == MAY_BE_LONG), ZEND_IS_NOT_EQUAL_LONG, CONST|TMPVARCV, CONST|TMPVARCV, SPEC(SMART_BRANCH,NO_CONST_CONST,COMMUTATIVE))
 {
 	USE_OPLINE
@@ -10050,6 +10068,18 @@ ZEND_VM_HOT_TYPE_SPEC_HANDLER(ZEND_IS_NOT_EQUAL|ZEND_IS_NOT_IDENTICAL, (op1_info
 	op1 = GET_OP1_ZVAL_PTR_UNDEF(BP_VAR_R);
 	op2 = GET_OP2_ZVAL_PTR_UNDEF(BP_VAR_R);
 	result = (Z_LVAL_P(op1) != Z_LVAL_P(op2));
+	ZEND_VM_SMART_BRANCH(result, 0);
+}
+
+ZEND_VM_HOT_TYPE_SPEC_HANDLER(ZEND_IS_NOT_EQUAL|ZEND_IS_NOT_IDENTICAL, (op1_info == MAY_BE_ATOM && op2_info == MAY_BE_ATOM), ZEND_IS_NOT_EQUAL_ATOM, CONST|TMPVARCV, CONST|TMPVARCV, SPEC(SMART_BRANCH,NO_CONST_CONST,COMMUTATIVE))
+{
+	USE_OPLINE
+	zval *op1, *op2;
+	bool result;
+
+	op1 = GET_OP1_ZVAL_PTR_UNDEF(BP_VAR_R);
+	op2 = GET_OP2_ZVAL_PTR_UNDEF(BP_VAR_R);
+	result = (Z_ATOM_ID_P(op1) != Z_ATOM_ID_P(op2));
 	ZEND_VM_SMART_BRANCH(result, 0);
 }
 

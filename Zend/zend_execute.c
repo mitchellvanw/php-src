@@ -44,6 +44,7 @@
 #include "zend_system_id.h"
 #include "zend_call_stack.h"
 #include "zend_attributes.h"
+#include "zend_atom.h"
 #include "Optimizer/zend_func_info.h"
 
 /* Virtual current working directory support */
@@ -2672,6 +2673,9 @@ static zend_never_inline uint8_t slow_index_convert(HashTable *ht, const zval *d
 		case IS_TRUE:
 			value->lval = 1;
 			return IS_LONG;
+		case IS_ATOM:
+			value->str = zend_atom_name(Z_ATOM_ID_P(dim));
+			return IS_STRING;
 		default:
 			zend_illegal_array_offset_access(dim);
 			return IS_NULL;
@@ -2746,6 +2750,9 @@ static zend_never_inline uint8_t slow_index_convert_w(HashTable *ht, const zval 
 		case IS_TRUE:
 			value->lval = 1;
 			return IS_LONG;
+		case IS_ATOM:
+			value->str = zend_atom_name(Z_ATOM_ID_P(dim));
+			return IS_STRING;
 		default:
 			zend_illegal_array_offset_access(dim);
 			return IS_NULL;
@@ -3202,6 +3209,8 @@ str_idx:
 		zend_use_resource_as_offset(offset);
 		hval = Z_RES_HANDLE_P(offset);
 		goto num_idx;
+	} else if (Z_TYPE_P(offset) == IS_ATOM) {
+		return zend_hash_find(ht, zend_atom_name(Z_ATOM_ID_P(offset)));
 	} else if (/*OP2_TYPE == IS_CV &&*/ Z_TYPE_P(offset) == IS_UNDEF) {
 		ZVAL_UNDEFINED_OP2();
 		goto str_idx;

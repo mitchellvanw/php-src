@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 824ccb41163307bd0fad452b705a8222b6f42d09 */
+ * Stub hash: b319a1197f131279574718e1308146a106dd55a2 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_set_time_limit, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, seconds, IS_LONG, 0)
@@ -2007,6 +2007,20 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_get_debug_type arginfo_gettype
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_atom, 0, 1, IS_ATOM, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_string, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, atom, IS_ATOM, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_get_defined_atoms arginfo_ob_list_handlers
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_atom_exists, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_settype, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(1, var, IS_MIXED, 0)
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
@@ -2050,6 +2064,8 @@ ZEND_END_ARG_INFO()
 #define arginfo_is_string arginfo_boolval
 
 #define arginfo_is_array arginfo_boolval
+
+#define arginfo_is_atom arginfo_boolval
 
 #define arginfo_is_object arginfo_boolval
 
@@ -2823,6 +2839,10 @@ ZEND_FUNCTION(stream_set_timeout);
 #endif
 ZEND_FUNCTION(gettype);
 ZEND_FUNCTION(get_debug_type);
+ZEND_FUNCTION(atom);
+ZEND_FUNCTION(string);
+ZEND_FUNCTION(get_defined_atoms);
+ZEND_FUNCTION(atom_exists);
 ZEND_FUNCTION(settype);
 ZEND_FUNCTION(intval);
 ZEND_FUNCTION(floatval);
@@ -2836,6 +2856,7 @@ ZEND_FUNCTION(is_float);
 ZEND_FUNCTION(is_numeric);
 ZEND_FUNCTION(is_string);
 ZEND_FUNCTION(is_array);
+ZEND_FUNCTION(is_atom);
 ZEND_FUNCTION(is_object);
 ZEND_FUNCTION(is_scalar);
 ZEND_FUNCTION(is_callable);
@@ -3431,6 +3452,10 @@ static const zend_function_entry ext_functions[] = {
 #endif
 	ZEND_RAW_FENTRY("gettype", zif_gettype, arginfo_gettype, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("get_debug_type", zif_get_debug_type, arginfo_get_debug_type, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
+	ZEND_FE(atom, arginfo_atom)
+	ZEND_FE(string, arginfo_string)
+	ZEND_FE(get_defined_atoms, arginfo_get_defined_atoms)
+	ZEND_FE(atom_exists, arginfo_atom_exists)
 	ZEND_FE(settype, arginfo_settype)
 	ZEND_RAW_FENTRY("intval", zif_intval, arginfo_intval, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("floatval", zif_floatval, arginfo_floatval, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
@@ -3448,6 +3473,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_RAW_FENTRY("is_numeric", zif_is_numeric, arginfo_is_numeric, ZEND_ACC_COMPILE_TIME_EVAL, frameless_function_infos_is_numeric, NULL)
 	ZEND_RAW_FENTRY("is_string", zif_is_string, arginfo_is_string, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_array", zif_is_array, arginfo_is_array, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
+	ZEND_RAW_FENTRY("is_atom", zif_is_atom, arginfo_is_atom, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_object", zif_is_object, arginfo_is_object, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_scalar", zif_is_scalar, arginfo_is_scalar, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_FE(is_callable, arginfo_is_callable)

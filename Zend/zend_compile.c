@@ -38,6 +38,7 @@
 #include "zend_call_stack.h"
 #include "zend_frameless_function.h"
 #include "zend_property_hooks.h"
+#include "zend_atom.h"
 
 #define SET_NODE(target, src) do { \
 		target ## _type = (src)->op_type; \
@@ -272,6 +273,7 @@ static const builtin_type_info builtin_types[] = {
 	{ZEND_STRL("iterable"), IS_ITERABLE},
 	{ZEND_STRL("object"), IS_OBJECT},
 	{ZEND_STRL("mixed"), IS_MIXED},
+	{ZEND_STRL("atom"), IS_ATOM},
 	{NULL, 0, IS_UNDEF}
 };
 
@@ -4123,7 +4125,7 @@ static zend_result zend_compile_func_is_scalar(znode *result, zend_ast_list *arg
 
 	zend_compile_expr(&arg_node, args->child[0]);
 	opline = zend_emit_op_tmp(result, ZEND_TYPE_CHECK, &arg_node, NULL);
-	opline->extended_value = (1 << IS_FALSE | 1 << IS_TRUE | 1 << IS_DOUBLE | 1 << IS_LONG | 1 << IS_STRING);
+	opline->extended_value = (1 << IS_FALSE | 1 << IS_TRUE | 1 << IS_DOUBLE | 1 << IS_LONG | 1 << IS_STRING | 1 << IS_ATOM);
 	return SUCCESS;
 }
 
@@ -9987,6 +9989,9 @@ static bool zend_try_ct_eval_array(zval *result, zend_ast *ast) /* {{{ */
 					break;
 				case IS_NULL:
 					zend_hash_update(Z_ARRVAL_P(result), ZSTR_EMPTY_ALLOC(), value);
+					break;
+				case IS_ATOM:
+					zend_hash_update(Z_ARRVAL_P(result), zend_atom_name(Z_ATOM_ID_P(key)), value);
 					break;
 				default:
 					zend_error_noreturn(E_COMPILE_ERROR, "Illegal offset type");

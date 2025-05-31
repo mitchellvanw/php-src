@@ -134,6 +134,8 @@ ZEND_API const char *zend_get_type_by_const(int type) /* {{{ */
 			return "iterable";
 		case IS_ARRAY:
 			return "array";
+		case IS_ATOM:
+			return "atom";
 		case IS_VOID:
 			return "void";
 		case IS_MIXED:
@@ -197,6 +199,8 @@ ZEND_API zend_string *zend_zval_get_legacy_type(const zval *arg) /* {{{ */
 			return ZSTR_KNOWN(ZEND_STR_STRING);
 		case IS_ARRAY:
 			return ZSTR_KNOWN(ZEND_STR_ARRAY);
+		case IS_ATOM:
+			return ZSTR_KNOWN(ZEND_STR_ATOM);
 		case IS_OBJECT:
 			return ZSTR_KNOWN(ZEND_STR_OBJECT);
 		case IS_RESOURCE:

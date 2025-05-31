@@ -33,6 +33,7 @@
 #include "zend_smart_string.h"
 #include "zend_cpuinfo.h"
 #include "zend_attributes.h"
+#include "zend_atom.h"
 #include "zend_observer.h"
 #include "zend_fibers.h"
 #include "zend_call_stack.h"
@@ -1055,6 +1056,7 @@ void zend_startup(zend_utility_functions *utility_functions) /* {{{ */
 
 	zend_interned_strings_init();
 	zend_startup_builtin_functions();
+	zend_startup_atoms();
 	zend_register_standard_constants();
 	zend_register_auto_global(zend_string_init_interned("GLOBALS", sizeof("GLOBALS") - 1, 1), 1, php_auto_globals_create_globals);
 
@@ -1195,6 +1197,7 @@ void zend_shutdown(void) /* {{{ */
 	free(GLOBAL_CONSTANTS_TABLE);
 	zend_shutdown_strtod();
 	zend_attributes_shutdown();
+	zend_atoms_shutdown();
 
 #ifdef ZTS
 	GLOBAL_FUNCTION_TABLE = NULL;
