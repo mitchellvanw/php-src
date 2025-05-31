@@ -33,6 +33,7 @@
 #include "zend_smart_string.h"
 #include "zend_cpuinfo.h"
 #include "zend_attributes.h"
+#include "zend_atom.h"
 #include "zend_observer.h"
 #include "zend_fibers.h"
 #include "zend_call_stack.h"
@@ -1197,6 +1198,7 @@ void zend_shutdown(void) /* {{{ */
 	free(GLOBAL_CONSTANTS_TABLE);
 	zend_shutdown_strtod();
 	zend_attributes_shutdown();
+	zend_atoms_shutdown();
 
 #ifdef ZTS
 	GLOBAL_FUNCTION_TABLE = NULL;

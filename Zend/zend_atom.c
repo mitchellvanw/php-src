@@ -29,8 +29,8 @@ static bool atoms_initialized = false;
 static void atom_dtor(zval *zv)
 {
 	zend_atom *atom = (zend_atom *)Z_PTR_P(zv);
-	zend_string_release(atom->name);
-	efree(atom);
+	zend_string_release_ex(atom->name, 1);
+	pefree(atom, 1);
 }
 
 ZEND_API void zend_atoms_init(void)
@@ -41,7 +41,10 @@ ZEND_API void zend_atoms_init(void)
 
 ZEND_API void zend_atoms_shutdown(void)
 {
-	zend_hash_destroy(&atom_table);
+	if (atoms_initialized) {
+		zend_hash_destroy(&atom_table);
+		atoms_initialized = false;
+	}
 }
 
 ZEND_API bool zend_atom_name_is_valid(const char *name, size_t name_len)
@@ -91,8 +94,8 @@ ZEND_API uint32_t zend_atom_create(zend_string *name)
 	}
 
 	/* Create new atom */
-	atom = emalloc(sizeof(zend_atom));
-	atom->name = zend_string_copy(name);
+	atom = pemalloc(sizeof(zend_atom), 1);
+	atom->name = zend_string_init(ZSTR_VAL(name), ZSTR_LEN(name), 1);
 	atom->id = next_atom_id++;
 
 	ZVAL_PTR(&atom_zv, atom);
