@@ -157,6 +157,9 @@ static zend_always_inline uint32_t _const_op_type(const zval *zv) {
 			tmp |= MAY_BE_RC1 | MAY_BE_RCN;
 		} else if (Z_TYPE_P(zv) == IS_STRING) {
 			tmp |= MAY_BE_RCN;
+		} else if (Z_TYPE_P(zv) == IS_ATOM) {
+			/* Atoms are not refcounted, but store their type precisely */
+			tmp = MAY_BE_ATOM;
 		}
 		return tmp;
 	}
