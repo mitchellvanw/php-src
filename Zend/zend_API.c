@@ -134,6 +134,8 @@ ZEND_API const char *zend_get_type_by_const(int type) /* {{{ */
 			return "iterable";
 		case IS_ARRAY:
 			return "array";
+		case IS_ATOM:
+			return "atom";
 		case IS_VOID:
 			return "void";
 		case IS_MIXED:

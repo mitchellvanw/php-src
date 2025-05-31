@@ -32,7 +32,8 @@
 #define MAY_BE_ARRAY	            (1 << IS_ARRAY)
 #define MAY_BE_OBJECT	            (1 << IS_OBJECT)
 #define MAY_BE_RESOURCE	            (1 << IS_RESOURCE)
-#define MAY_BE_ANY                  (MAY_BE_NULL|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE)
+#define MAY_BE_ATOM	                (1 << IS_ATOM)
+#define MAY_BE_ANY                  (MAY_BE_NULL|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE|MAY_BE_ATOM)
 #define MAY_BE_REF                  (1 << IS_REFERENCE) /* may be reference */
 
 /* These are used in zend_type, but not for type inference.
@@ -53,6 +54,7 @@
 #define MAY_BE_ARRAY_OF_ARRAY		(MAY_BE_ARRAY    << MAY_BE_ARRAY_SHIFT)
 #define MAY_BE_ARRAY_OF_OBJECT		(MAY_BE_OBJECT   << MAY_BE_ARRAY_SHIFT)
 #define MAY_BE_ARRAY_OF_RESOURCE	(MAY_BE_RESOURCE << MAY_BE_ARRAY_SHIFT)
+#define MAY_BE_ARRAY_OF_ATOM		(MAY_BE_ATOM     << MAY_BE_ARRAY_SHIFT)
 #define MAY_BE_ARRAY_OF_ANY			(MAY_BE_ANY      << MAY_BE_ARRAY_SHIFT)
 #define MAY_BE_ARRAY_OF_REF			(MAY_BE_REF      << MAY_BE_ARRAY_SHIFT)
 

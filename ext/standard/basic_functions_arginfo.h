@@ -2007,10 +2007,12 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_get_debug_type arginfo_gettype
 
-#define arginfo_atom arginfo_constant
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_atom, 0, 1, IS_ATOM, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_string, 0, 1, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, atom, IS_MIXED, 0)
+	ZEND_ARG_TYPE_INFO(0, atom, IS_ATOM, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_get_defined_atoms arginfo_ob_list_handlers
@@ -2062,6 +2064,8 @@ ZEND_END_ARG_INFO()
 #define arginfo_is_string arginfo_boolval
 
 #define arginfo_is_array arginfo_boolval
+
+#define arginfo_is_atom arginfo_boolval
 
 #define arginfo_is_object arginfo_boolval
 
@@ -2852,6 +2856,7 @@ ZEND_FUNCTION(is_float);
 ZEND_FUNCTION(is_numeric);
 ZEND_FUNCTION(is_string);
 ZEND_FUNCTION(is_array);
+ZEND_FUNCTION(is_atom);
 ZEND_FUNCTION(is_object);
 ZEND_FUNCTION(is_scalar);
 ZEND_FUNCTION(is_callable);
@@ -3468,6 +3473,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_RAW_FENTRY("is_numeric", zif_is_numeric, arginfo_is_numeric, ZEND_ACC_COMPILE_TIME_EVAL, frameless_function_infos_is_numeric, NULL)
 	ZEND_RAW_FENTRY("is_string", zif_is_string, arginfo_is_string, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_array", zif_is_array, arginfo_is_array, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
+	ZEND_RAW_FENTRY("is_atom", zif_is_atom, arginfo_is_atom, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_object", zif_is_object, arginfo_is_object, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_RAW_FENTRY("is_scalar", zif_is_scalar, arginfo_is_scalar, ZEND_ACC_COMPILE_TIME_EVAL, NULL, NULL)
 	ZEND_FE(is_callable, arginfo_is_callable)

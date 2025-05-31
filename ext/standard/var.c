@@ -574,6 +574,16 @@ again:
 			zend_string_free(ztmp);
 			zend_string_free(ztmp2);
 			break;
+		case IS_ATOM: {
+			zend_string *atom_name = zend_atom_name(Z_ATOM_ID_P(struc));
+			if (atom_name) {
+				smart_str_appendc(buf, ':');
+				smart_str_append(buf, atom_name);
+			} else {
+				smart_str_appendl(buf, "atom(INVALID)", 13);
+			}
+			break;
+		}
 		case IS_ARRAY:
 			myht = Z_ARRVAL_P(struc);
 			if (!(GC_FLAGS(myht) & GC_IMMUTABLE)) {
@@ -1131,6 +1141,21 @@ again:
 		case IS_STRING:
 			php_var_serialize_string(buf, Z_STRVAL_P(struc), Z_STRLEN_P(struc));
 			return;
+
+		case IS_ATOM: {
+			zend_string *atom_name = zend_atom_name(Z_ATOM_ID_P(struc));
+			if (atom_name) {
+				smart_str_appendl(buf, "A:", 2);
+				smart_str_append_unsigned(buf, ZSTR_LEN(atom_name));
+				smart_str_appendl(buf, ":\"", 2);
+				smart_str_append(buf, atom_name);
+				smart_str_appendl(buf, "\";", 2);
+			} else {
+				/* Invalid atom, serialize as null */
+				smart_str_appendl(buf, "N;", 2);
+			}
+			return;
+		}
 
 		case IS_OBJECT: {
 				zend_class_entry *ce = Z_OBJCE_P(struc);

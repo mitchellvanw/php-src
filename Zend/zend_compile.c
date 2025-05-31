@@ -272,6 +272,7 @@ static const builtin_type_info builtin_types[] = {
 	{ZEND_STRL("iterable"), IS_ITERABLE},
 	{ZEND_STRL("object"), IS_OBJECT},
 	{ZEND_STRL("mixed"), IS_MIXED},
+	{ZEND_STRL("atom"), IS_ATOM},
 	{NULL, 0, IS_UNDEF}
 };
 
@@ -4123,7 +4124,7 @@ static zend_result zend_compile_func_is_scalar(znode *result, zend_ast_list *arg
 
 	zend_compile_expr(&arg_node, args->child[0]);
 	opline = zend_emit_op_tmp(result, ZEND_TYPE_CHECK, &arg_node, NULL);
-	opline->extended_value = (1 << IS_FALSE | 1 << IS_TRUE | 1 << IS_DOUBLE | 1 << IS_LONG | 1 << IS_STRING);
+	opline->extended_value = (1 << IS_FALSE | 1 << IS_TRUE | 1 << IS_DOUBLE | 1 << IS_LONG | 1 << IS_STRING | 1 << IS_ATOM);
 	return SUCCESS;
 }
 

@@ -3597,9 +3597,9 @@ function gettype(mixed $value): string {}
  */
 function get_debug_type(mixed $value): string {}
 
-function atom(string $name): mixed {}
+function atom(string $name): atom {}
 
-function string(mixed $atom): string {}
+function string(atom $atom): string {}
 
 function get_defined_atoms(): array {}
 
@@ -3679,6 +3679,11 @@ function is_string(mixed $value): bool {}
  * @compile-time-eval
  */
 function is_array(mixed $value): bool {}
+
+/**
+ * @compile-time-eval
+ */
+function is_atom(mixed $value): bool {}
 
 /**
  * @compile-time-eval

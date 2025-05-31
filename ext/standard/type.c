@@ -323,6 +323,14 @@ PHP_FUNCTION(is_array)
 }
 /* }}} */
 
+/* {{{ Returns true if variable is an atom
+   Warning: This function is special-cased by zend_compile.c and so is usually bypassed */
+PHP_FUNCTION(is_atom)
+{
+	php_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_ATOM);
+}
+/* }}} */
+
 /* {{{ Returns true if $array is an array whose keys are all numeric, sequential, and start at 0 */
 PHP_FUNCTION(array_is_list)
 {
@@ -403,6 +411,7 @@ PHP_FUNCTION(is_scalar)
 		case IS_DOUBLE:
 		case IS_LONG:
 		case IS_STRING:
+		case IS_ATOM:
 			RETURN_TRUE;
 			break;
 
