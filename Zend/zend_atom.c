@@ -99,7 +99,7 @@ ZEND_API uint32_t zend_atom_create(zend_string *name)
 	atom->id = next_atom_id++;
 
 	ZVAL_PTR(&atom_zv, atom);
-	zend_hash_add(&atom_table, name, &atom_zv);
+	zend_hash_add(&atom_table, atom->name, &atom_zv);
 
 	return atom->id;
 }
