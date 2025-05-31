@@ -6282,6 +6282,9 @@ ZEND_VM_C_LABEL(num_index):
 			zend_use_resource_as_offset(offset);
 			hval = Z_RES_HANDLE_P(offset);
 			ZEND_VM_C_GOTO(num_index);
+		} else if (Z_TYPE_P(offset) == IS_ATOM) {
+			str = zend_atom_name(Z_ATOM_ID_P(offset));
+			ZEND_VM_C_GOTO(str_index);
 		} else if (OP2_TYPE == IS_CV && Z_TYPE_P(offset) == IS_UNDEF) {
 			ZVAL_UNDEFINED_OP2();
 			str = ZSTR_EMPTY_ALLOC();
@@ -6792,6 +6795,9 @@ ZEND_VM_C_LABEL(num_index_dim):
 				zend_use_resource_as_offset(offset);
 				hval = Z_RES_HANDLE_P(offset);
 				ZEND_VM_C_GOTO(num_index_dim);
+			} else if (Z_TYPE_P(offset) == IS_ATOM) {
+				key = zend_atom_name(Z_ATOM_ID_P(offset));
+				ZEND_VM_C_GOTO(str_index_dim);
 			} else if (OP2_TYPE == IS_CV && Z_TYPE_P(offset) == IS_UNDEF) {
 				ZVAL_UNDEFINED_OP2();
 				key = ZSTR_EMPTY_ALLOC();

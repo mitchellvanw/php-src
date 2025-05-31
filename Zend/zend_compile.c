@@ -38,6 +38,7 @@
 #include "zend_call_stack.h"
 #include "zend_frameless_function.h"
 #include "zend_property_hooks.h"
+#include "zend_atom.h"
 
 #define SET_NODE(target, src) do { \
 		target ## _type = (src)->op_type; \
@@ -9988,6 +9989,9 @@ static bool zend_try_ct_eval_array(zval *result, zend_ast *ast) /* {{{ */
 					break;
 				case IS_NULL:
 					zend_hash_update(Z_ARRVAL_P(result), ZSTR_EMPTY_ALLOC(), value);
+					break;
+				case IS_ATOM:
+					zend_hash_update(Z_ARRVAL_P(result), zend_atom_name(Z_ATOM_ID_P(key)), value);
 					break;
 				default:
 					zend_error_noreturn(E_COMPILE_ERROR, "Illegal offset type");
